@@ -96,7 +96,7 @@ const LS_KEY = '_$-todos_'
 
 function TodoList() {
   const [todos,setTodos] = useState([])
-
+  const [incrementCount,setIncrementCount] = useState(0)
   const addTodo = useCallback((todo)=>{
     setTodos(todos=>[...todos,todo])
   },[])
@@ -118,34 +118,63 @@ function TodoList() {
     }))
   },[])
 
-
-  const dispatch = useCallback((action)=>{
-    const{type,payload} = action
+  function reducer(state,action) {
+    const {type,payload} = action
+    const {todos,incrementCount} = state
     switch (type) {
       case 'set':
-        setTodos(payload)
-        break 
+        return {
+          ...state,
+          todos:payload,
+          incrementCount:incrementCount+1
+        }
       case 'add':
-          setTodos(todos=>[...todos,payload])
-        break 
+        return {
+          ...state,
+          todos: [...todos,payload],
+          incrementCount:incrementCount+1
+        }
       case 'remove':
-        setTodos(todos=>todos.filter(todo=>{
-          return todo.id !==payload
-        }))
-        break
+        return {
+          ...state,
+          todos:todos.filter(todo=>{
+            return todo.id !==payload
+          })
+        }
       case 'toggle':
-        setTodos(todos => todos.map(todo=>{
-          return todo.id ===payload
-              ?{
-                ...todo,
-                complete:!todo.complete,
-              }
-              :todo
-        }))
-        break
+        return {
+          ...state,
+          todos:todos.map(todo=>{
+                  return todo.id ===payload
+                      ?{
+                        ...todo,
+                        complete:!todo.complete,
+                      }
+                      :todo
+                  })
+        }
+    
       default:
+        break;
     }
-  },[])
+    return state
+  }
+
+
+  const dispatch = useCallback((action)=>{
+    const state = {
+      todos,
+      incrementCount
+    }
+    const setters = {
+      todos:setTodos,
+      incrementCount:setIncrementCount
+    }
+    const newState = reducer(state,action)
+    for(let key in newState){
+      setters[key](newState[key])
+    }
+  },[todos,incrementCount])
 
 
   useEffect(()=>{
