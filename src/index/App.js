@@ -7,7 +7,7 @@ import DepartDate from "./DepartDate"
 import HighSpeed from "./HighSpeed"
 import Journey from "./Journey"
 import Submit from "./Submit"
-import { exchangeFromTo, showCitySelector } from "./action.js"
+import { exchangeFromTo, showCitySelector,hideCitySelector} from "./action.js"
 import CitySelector from "../common/CitySelector"
 
 function App(props) {
@@ -27,11 +27,17 @@ function App(props) {
     return bindActionCreators(
       {
         exchangeFromTo,
-        showCitySelector
+        showCitySelector,
+        hideCitySelector
       },
       dispatch
     )
   }, [])
+  const CitySelectorCbs = useMemo(()=>{
+    return bindActionCreators({
+      onBack:hideCitySelector,
+    },dispatch)
+  },[])
 
   return (
     <div>
@@ -48,6 +54,7 @@ function App(props) {
         show={isCitySelectorVisible}
         cityData={cityData}
         isLoading={isLoadingCityData}
+        {...CitySelectorCbs}
       />
     </div>
   )
