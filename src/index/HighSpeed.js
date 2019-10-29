@@ -1,10 +1,8 @@
-import React from 'react'
-import './HighSpeed.css'
+import React from "react"
+import "./HighSpeed.css"
 
 function HighSpeed() {
-  return (
-    <div></div>
-  )
+  return <div></div>
 }
 
 export default HighSpeed
