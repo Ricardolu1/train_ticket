@@ -7,7 +7,11 @@ import DepartDate from "./DepartDate"
 import HighSpeed from "./HighSpeed"
 import Journey from "./Journey"
 import Submit from "./Submit"
-import { exchangeFromTo, showCitySelector,hideCitySelector} from "./action.js"
+import { exchangeFromTo,
+         showCitySelector,
+         hideCitySelector,
+         fetchCityData
+        } from "./action.js"
 import CitySelector from "../common/CitySelector"
 
 function App(props) {
@@ -17,7 +21,8 @@ function App(props) {
     dispatch,
     cityData,
     isLoadingCityData,
-    isCitySelectorVisible
+    isCitySelectorVisible,
+    setSelectedCity
   } = props
   const onBack = useCallback(() => {
     window.history.back()
@@ -36,6 +41,8 @@ function App(props) {
   const CitySelectorCbs = useMemo(()=>{
     return bindActionCreators({
       onBack:hideCitySelector,
+      fetchCityData,
+      onSelect:setSelectedCity
     },dispatch)
   },[])
 
