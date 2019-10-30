@@ -7,11 +7,13 @@ import DepartDate from "./DepartDate"
 import HighSpeed from "./HighSpeed"
 import Journey from "./Journey"
 import Submit from "./Submit"
-import { exchangeFromTo,
-         showCitySelector,
-         hideCitySelector,
-         fetchCityData
-        } from "./action.js"
+import { 
+  exchangeFromTo,
+  showCitySelector,
+  hideCitySelector,
+  fetchCityData,
+  setSelectedCity
+} from "./action.js"
 import CitySelector from "../common/CitySelector"
 
 function App(props) {
@@ -22,7 +24,6 @@ function App(props) {
     cityData,
     isLoadingCityData,
     isCitySelectorVisible,
-    setSelectedCity
   } = props
   const onBack = useCallback(() => {
     window.history.back()
@@ -38,14 +39,13 @@ function App(props) {
       dispatch
     )
   }, [])
-  const CitySelectorCbs = useMemo(()=>{
+  const citySelectorCbs = useMemo(()=>{
     return bindActionCreators({
       onBack:hideCitySelector,
       fetchCityData,
       onSelect:setSelectedCity
     },dispatch)
   },[])
-
   return (
     <div>
       <div className="header-wrapper">
@@ -61,17 +61,17 @@ function App(props) {
         show={isCitySelectorVisible}
         cityData={cityData}
         isLoading={isLoadingCityData}
-        {...CitySelectorCbs}
+        {...citySelectorCbs}
       />
     </div>
   )
 }
 
 export default connect(
-  function mapStateToProps(state) {
+  function mapStateToProps(state) { //这里的state就是当前的store里面的state
     return state
   },
   function mapDispatchToProps(dispatch) {
-    return { dispatch }
+    return { dispatch } //对象的键是dispat，只是传进来的参数，相当于{dispatch:dispatch}
   }
 )(App)

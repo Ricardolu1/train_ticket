@@ -53,7 +53,7 @@ function CityList(props) {
                 key={section.title}
                 title={section.title}
                 cities={section.citys}
-                onSelct = {onSelect}
+                onSelect = {onSelect}
               />
             )
           })
@@ -93,7 +93,7 @@ export default function CitySelector(props) {
       return (
         <CityList 
           sections={cityData.cityList}
-          onSelct = {onSelect}
+          onSelect = {onSelect}
         />
       )
     } 
