@@ -1,9 +1,9 @@
-import React, {useState , useMemo,useEffect} from "react"
+import React, {useState , useMemo, useEffect, memo} from "react"
 import classnames from "classnames"
 import PropTypes from 'prop-types'
 import "./CitySelector.css"
 
-function CityItem(props) {
+const CityItem = memo(function CityItem(props) {
   const {
     name,
     onSelect,
@@ -13,9 +13,14 @@ function CityItem(props) {
       {name}
     </li>
   )
+})
+
+CityItem.propTypes = {
+  name:PropTypes.string.isRequired,
+  onSelect:PropTypes.func.isRequired,
 }
 
-function CitySection(props) {
+const CitySection =  memo(function CitySection(props) {
   const {
     title,
     cities = [],
@@ -23,7 +28,7 @@ function CitySection(props) {
   }=props
   return (
     <ul className="city-ul">
-      <li className="city-li">
+      <li className="city-li" data-cate={title}>
         {title}
       </li>
       {cities.map(city=>{
@@ -36,12 +41,39 @@ function CitySection(props) {
       })}
     </ul>
   )
+})
+
+CitySection.propTypes = { 
+  title:PropTypes.string.isRequired,
+  cities:PropTypes.array,
+  onSelect:PropTypes.func.isRequired
 }
 
-function CityList(props) {
+const AlphaIndex =memo(function AlphaIndex(props) {
+  const {
+    alpha,
+    onClick
+  }=props
+  return (
+    <li 
+      className="city-index-item"
+      onClick={()=>onClick(alpha)}
+    >
+      {alpha}
+    </li>
+  )
+}) 
+
+const alphanet =  Array.from(new Array(26),(ele,index)=>{
+  return String.fromCharCode(65+index)
+})
+
+
+const CityList = memo(function CityList(props) {
   const {
     sections,
-    onSelect
+    onSelect,
+    toAlpha
   }=props
   return(
     <div className="city-list">
@@ -59,13 +91,27 @@ function CityList(props) {
           })
         }
       </div>
+      <div className="city-index">
+      { alphanet.map(alpha=>{
+        return (
+          <AlphaIndex 
+            key= {alpha} 
+            alpha={alpha} 
+            onClick={toAlpha}
+        />)
+      }) }
+      </div>
     </div>
   )
+})
+
+CityList.propTypes = {
+  section:PropTypes.array.isRequired,
+  onSelect:PropTypes.func.isRequired
 }
 
 
-
-export default function CitySelector(props) {
+ const CitySelector = memo(function CitySelector(props) {
   const { 
           show, 
           cityData, 
@@ -83,6 +129,11 @@ export default function CitySelector(props) {
     fetchCityData()
   },[show,cityData,isLoading])
 
+  const toAlpha = alpha =>{
+    document.querySelector(`[data-cate=${alpha}]`)
+      .scrollIntoView()
+  }
+
   const ontputCitySections = ()=>{
     if (isLoading) {
       return (
@@ -94,6 +145,7 @@ export default function CitySelector(props) {
         <CityList 
           sections={cityData.cityList}
           onSelect = {onSelect}
+          toAlpha={toAlpha}
         />
       )
     } 
@@ -132,12 +184,15 @@ export default function CitySelector(props) {
       {ontputCitySections()}
     </div>
   )
-}
+})
 
 CitySelector.propTypes = {
   show:PropTypes.bool.isRequired,
   cityData:PropTypes.object,
   isLoading:PropTypes.bool.isRequired,
   onBack:PropTypes.func.isRequired,
-  fetchCityData:PropTypes.func.isRequired
+  fetchCityData:PropTypes.func.isRequired,
+  onSelect:PropTypes.func.isRequired
 }
+
+export default CitySelector
