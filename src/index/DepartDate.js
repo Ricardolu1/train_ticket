@@ -21,7 +21,7 @@ function DepartDate(props) {
   
   const isToday = h0ofDepart===h0()
 
-  const weekString  = '周'+['日','一','二','三','四','五','六'][departDate.getDay()]+ (isToday?'(今天)':'')
+  const weekString  = '周'+['日','一','二','三','四','五','六'][departDate.getDay()] + (isToday?'(今天)':'')
 
    return (
     <div className="depart-date" onClick={onClick}> 

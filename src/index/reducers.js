@@ -8,7 +8,7 @@ import {
   ACTION_SET_IS_DATE_SELECTOR_VISIBLE,
   ACTION_SET_HIGH_SPEED,
   ACTION_SET_DEPART_DATE
-
+  
 } from './action'
 
 export default {

@@ -13,9 +13,11 @@ import {
   hideCitySelector,
   fetchCityData,
   setSelectedCity,
-  showDateSelector
+  showDateSelector,
+  hideDateSelector,
 } from "./action.js"
 import CitySelector from "../common/CitySelector"
+import DateSelector from "../common/DateSelector"
 
 function App(props) {
   const {
@@ -25,6 +27,7 @@ function App(props) {
     cityData,
     isLoadingCityData,
     isCitySelectorVisible,
+    isDateSelectorVisible,
     departDate
   } = props
   const onBack = useCallback(() => {
@@ -55,6 +58,12 @@ function App(props) {
     },dispatch)
   },[])
 
+  const DateSelectorCbs = useMemo(()=>{
+    return bindActionCreators({
+      onBack:hideDateSelector
+    },dispatch)
+  },[])
+
   return (
     <div>
       <div className="header-wrapper">
@@ -74,6 +83,11 @@ function App(props) {
         cityData={cityData}
         isLoading={isLoadingCityData}
         {...citySelectorCbs}
+      />
+      <DateSelector 
+        show={isDateSelectorVisible}
+        {...DateSelectorCbs}
+
       />
     </div>
   )
