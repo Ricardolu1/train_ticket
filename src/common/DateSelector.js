@@ -1,59 +1,124 @@
-import React from 'react'
-import './DateSelector.css'
-import PropTypes from 'prop-types'
-import classnames from 'classnames'
-import Header from './Header'
+import React from "react"
+import "./DateSelector.css"
+import PropTypes from "prop-types"
+import classnames from "classnames"
+import Header from "./Header"
+import { h0 } from "./fp"
+
+function Day(props) {
+  const {
+    day, //这一天的零时刻
+    onSelect
+  } = props
+  if (!day) {
+    return <td className="null"></td>
+  }
+  const classes = []
+  const now = h0()
+
+  if (day < now) {
+    classes.push("disabled")
+  }
+  if ([6, 0].includes(new Date(day).getDay())) {
+    classes.push("weekend")
+  }
+
+  const dateString = now === day ? "今天" : new Date(day).getDate()
+  return <td className={classnames(classes)}>{dateString}</td>
+}
+Day.propTypes = {
+  day: PropTypes.number, //这个day有可能是不存在的
+  onSelect: PropTypes.func.isRequired
+}
+
+function Week(props) {
+  const { days, onSelect } = props
+  return (
+    <tr className="date-table-days">
+      {days.map((day, idx) => {
+        return <Day key={idx} day={day} onSelect={onSelect} />
+      })}
+    </tr>
+  )
+}
+
+Week.propTypes = {
+  days: PropTypes.array.isRequired,
+  onSelect: PropTypes.func.isRequired
+}
 
 function Month(props) {
-  const {
-    startingTimeInMonth
-
-  }=props
+  const { startingTimeInMonth, onSelect } = props
   const startDay = new Date(startingTimeInMonth)
   const currentDay = new Date(startingTimeInMonth)
   let days = []
-  while(currentDay.getMonth()=== startDay.getMonth){
+
+  while (currentDay.getMonth() === startDay.getMonth()) {
     days.push(currentDay.getTime())
-    currentDay.setDate( currentDay.getDate()+1)
+    currentDay.setDate(currentDay.getDate() + 1)
   }
-  days = new Array(startDay.getDay() ? startDay.getDay()-1:6)
-    .fill(null).concat(days)
+
+
+  days = new Array(startDay.getDay() ? startDay.getDay() - 1 : 6)
+    .fill(null)
+    .concat(days)
+
+  const lastDay = new Date(days[days.length - 1])
+
+  days = days.concat(
+    new Array(lastDay.getDay() ? 7 - lastDay.getDay() : 0).fill(null)
+  )
   
-  const lastDay = new Date(days[days.length-1])
-
-  days = days.concat(new Array(lastDay.getDay() ? 7- lastDay.getDay(): 0 )    .fill(null))
-
   const weeks = []
 
-  for (let row = 0; row < days.length; ++row) {
-    const week = days.slice(row*7,(row+1*7))
+  for (let row = 0; row < days.length/7; ++row) {
+    const week = days.slice(row * 7, (row + 1) * 7)
     weeks.push(week)
   }
 
-  return(
+  return (
     <table className="date-table">
       <thead>
         <tr>
           <td colSpan="7">
             <h5>
-              {startDay.getFullYear()}年{startDay.getMonth()+1}月
+              {startDay.getFullYear()}年{startDay.getMonth() + 1}月
             </h5>
           </td>
         </tr>
       </thead>
+      <tbody>
+        <tr className="date-table-weeks">
+          <th>周一</th>
+          <th>周二</th>
+          <th>周三</th>
+          <th>周四</th>
+          <th>周五</th>
+          <th className="weekend">周六</th>
+          <th className="weekend">周日</th>
+        </tr>
+        {weeks.map((week, index) => {
+          return (
+            <Week
+              key={index} //由于每一周的顺序都是不变的，在这里可以安全的使用index
+              days={week}
+              onSelect={onSelect}
+            />
+          )
+        })}
+      </tbody>
     </table>
   )
 }
 
-
+Month.propTypes = {
+  startingTimeInMonth: PropTypes.number.isRequired,
+  onSelect: PropTypes.func.isRequired
+}
 
 export default function DateSelector(props) {
-  const {
-    show,
-    onSelect,
-    onBack
-  }=props
-  const now = new Date ()
+  const { show, onSelect, onBack } = props
+  const now = new Date()
   now.setHours(0)
   now.setMinutes(0)
   now.setSeconds(0)
@@ -62,22 +127,22 @@ export default function DateSelector(props) {
 
   const monthSequence = [now.getTime()]
 
-  now.setMonth(now.getMonth()+1)
+  now.setMonth(now.getMonth() + 1) //这里会改变now的值
   monthSequence.push(now.getTime())
 
-  now.setMonth(now.getMonth()+1)
+  now.setMonth(now.getMonth() + 1)
   monthSequence.push(now.getTime())
-
 
   return (
-    <div className={classnames('date-selector',{hidden:!show})}>
+    <div className={classnames("date-selector", { hidden: !show })}>
       <Header title="日期选择" onBack={onBack} />
       <div className="date-selector-tables">
-       { monthSequence.map(month=>{
+        {monthSequence.map(month => {
           return (
-            <Month 
-              key={month} 
-              startingTimeInMonth={month} 
+            <Month
+              key={month}
+              startingTimeInMonth={month}
+              onSelect={onSelect}
             />
           )
         })}
@@ -86,25 +151,8 @@ export default function DateSelector(props) {
   )
 }
 
-DateSelector.propTypes={
-  show:PropTypes.bool.isRequired,
-  onSelect:PropTypes.func.isRequired,
-  onBack:PropTypes.func.isRequired
+DateSelector.propTypes = {
+  show: PropTypes.bool.isRequired,
+  onSelect: PropTypes.func.isRequired,
+  onBack: PropTypes.func.isRequired
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
