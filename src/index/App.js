@@ -15,10 +15,11 @@ import {
   setSelectedCity,
   showDateSelector,
   hideDateSelector,
+  setDepartDate,
 } from "./action.js"
 import CitySelector from "../common/CitySelector"
 import DateSelector from "../common/DateSelector"
-
+import {h0} from '../common/fp'
 function App(props) {
   const {
     from,
@@ -64,6 +65,17 @@ function App(props) {
     },dispatch)
   },[])
 
+  const onSelectDate=useCallback((day)=>{
+    if (!day) {
+      return
+    }
+    if (day<h0) {
+      return
+    }
+    dispatch(setDepartDate(day))
+    dispatch(hideDateSelector())
+  },[])
+
   return (
     <div>
       <div className="header-wrapper">
@@ -87,6 +99,7 @@ function App(props) {
       <DateSelector 
         show={isDateSelectorVisible}
         {...DateSelectorCbs}
+        onSelect={onSelectDate}
 
       />
     </div>

@@ -24,7 +24,11 @@ function Day(props) {
   }
 
   const dateString = now === day ? "今天" : new Date(day).getDate()
-  return <td className={classnames(classes)}>{dateString}</td>
+  return (
+    <td className={classnames(classes)} onClick={()=>onSelect(day)}>
+      {dateString}
+    </td>
+  )
 }
 Day.propTypes = {
   day: PropTypes.number, //这个day有可能是不存在的
