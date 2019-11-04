@@ -1,12 +1,14 @@
-import React from 'react'
+import React ,{memo}from 'react'
 import './Submit.css'
 
-function Submit() {
+const Submit = memo(function Submit() {
   return (
-    <div></div>
+    <div className="submit">
+      <button className="submit-button" type="submit">搜索</button>
+    </div>
   )
 
-}
+})
 
 
 
