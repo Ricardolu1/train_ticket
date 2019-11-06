@@ -7,7 +7,6 @@ import PropTypes from 'prop-types'
 import classnames from 'classnames'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
-import useNav from '../common/useNav'
 
 const Nav = memo(function Nav(props) {
   const {

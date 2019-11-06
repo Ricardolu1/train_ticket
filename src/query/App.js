@@ -1,6 +1,13 @@
 import {connect} from 'react-redux'
 import './App.css'
-import React , {useCallback,useEffect}from 'react'
+import React , {
+  useCallback,
+  useEffect,
+  useMemo
+}from 'react'
+
+import {bindActionCreators } from 'redux'
+
 import Nav from '../common/Nav'
 import List from './List'
 import Bottom from './Bottom'
@@ -18,27 +25,51 @@ import {
   setTrainTypes,
   setDepartStations,
   setArriveStations,
+
   prevDate,
-  nextDate
+  nextDate,
+
+  toggleHighSpeed,
+  toggleIsFiltersVisible,
+  toggleOnlyTickets,
+  toggleOrderType,
+
+  setCheckedTicketTypes,
+  setCheckedTrainTypes,
+  setCheckedDepartStations,
+  setCheckedArriveStations,
+  setDepartTimeStart,
+  setDepartTimeEnd,
+  setArriveTimeStart,
+  setArriveTimeEnd,
+
+
 } from './action'
 import dayjs from 'dayjs'
 import {h0} from '../common/fp'
 import useNav from '../common/useNav'
+
+
 function App(props) {
   const { 
     trainList, //array
     from,
     to,
     departDate,
-    highSpeed,
+    highSpeed, //布尔值
     searchParsed,
     dispatch,
-    orderType,
-    onlyTickets,
-    checkedTicketTypes,
-    checkedTrainTypes,
-    checkedDepartStations,
-    checkedArriveStations,
+    orderType, //这是一个枚举值
+    onlyTickets, //布尔值
+    isFiltersVisible, //代表综合删选浮层是否显示
+    ticketTypes,//array
+    trainTypes,//array 代表不定项选择的所有选项
+    departStations,//array 代表不定项选择的所有选项
+    arriveStations,//array 代表不定项选择的所有选项
+    checkedTicketTypes, //都是对象
+    checkedTrainTypes, //都是对象
+    checkedDepartStations, //都是对象
+    checkedArriveStations, //都是对象
     departTimeStart,
     departTimeEnd,
     arriveTimeStart,
@@ -130,6 +161,23 @@ function App(props) {
     next,
   } =useNav(departDate,dispatch,prevDate,nextDate)
 
+  const bottomCbs = useMemo(()=>{
+    return bindActionCreators({
+      toggleHighSpeed,
+      toggleIsFiltersVisible,
+      toggleOnlyTickets,
+      toggleOrderType,
+      setCheckedTicketTypes,
+      setCheckedTrainTypes,
+      setCheckedDepartStations,
+      setCheckedArriveStations,
+      setDepartTimeStart,
+      setDepartTimeEnd,
+      setArriveTimeStart,
+      setArriveTimeEnd,
+    },dispatch)
+  },[])
+
   if (!searchParsed) {
     return null
   }
@@ -149,7 +197,25 @@ function App(props) {
       <List 
         list={trainList}
       />
-      <Bottom />
+      <Bottom 
+        highSpeed={highSpeed}
+        orderType={orderType}
+        onlyTickets={onlyTickets}
+        isFiltersVisible={isFiltersVisible}
+        ticketTypes={ticketTypes}
+        trainTypes={trainTypes}
+        departStations={departStations}
+        arriveStations={arriveStations}
+        checkedTicketTypes={checkedTicketTypes}
+        checkedTrainTypes={checkedTrainTypes}
+        checkedDepartStations={checkedDepartStations}
+        checkedArriveStations={checkedArriveStations}
+        departTimeStart={departTimeStart}
+        departTimeEnd={departTimeEnd}
+        arriveTimeStart={arriveTimeStart}
+        arriveTimeEnd={arriveTimeEnd}
+        {...bottomCbs}
+      />
     </div>
   )
 }
