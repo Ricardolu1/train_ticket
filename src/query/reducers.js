@@ -125,6 +125,8 @@ export default {
       switch (type) {
           case ACTION_SET_TRAIN_TYPES:
               return payload;
+          
+                  
           default:
       }
 
