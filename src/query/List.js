@@ -18,7 +18,6 @@ const ListItem = memo(function ListItem(props){
     priceMsg,//价格字符串表示
     dayAfter, //是否跨越日期的标记
   }=props //这九个数据都是字符串形式
-
   const url= useMemo(()=>{
               return  new URI('ticket.html')
                   .setSearch('aStation',aStation)
@@ -84,7 +83,6 @@ const List = memo(function List(props) {
   const {
     list
   }=props
-
   return (
     <ul className="List">
       {

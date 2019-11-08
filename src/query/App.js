@@ -177,7 +177,6 @@ function App(props) {
       setArriveTimeEnd,
     },dispatch)
   },[])
-
   if (!searchParsed) {
     return null
   }

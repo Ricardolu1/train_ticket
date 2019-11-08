@@ -1,3 +1,5 @@
+import {h0} from '../common/fp'
+
 export const  ACTION_SET_DEPART_DATE='SET_DEPART_DATE'
 export const  ACTION_SET_ARRIVE_DATE='SET_ARRIVE_DATE'
 export const  ACTION_SET_DEPART_TIME_STR='SET_DEPART_TIME_STR'
@@ -83,6 +85,22 @@ export function setSearchParsed(searchParsed){
     type:ACTION_SET_SEARCH_PARSED,
     payload:searchParsed
   }
+}
+
+export function nextDate() {
+  return (dispatch, getState) => {
+      const { departDate } = getState();
+
+      dispatch(setDepartDate(h0(departDate) + 86400 * 1000));
+  };
+}
+
+export function prevDate() {
+  return (dispatch, getState) => {
+      const { departDate } = getState();
+
+      dispatch(setDepartDate(h0(departDate) - 86400 * 1000));
+  };
 }
 
 
