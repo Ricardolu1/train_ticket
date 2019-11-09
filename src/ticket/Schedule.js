@@ -28,9 +28,6 @@ const ScheduleRow = memo(function ScheduleRow(props) {
     afterArriveStation,
   }=props
 
-  
-
-
 
   return (
     <li>
@@ -53,12 +50,12 @@ const ScheduleRow = memo(function ScheduleRow(props) {
         })}>
           {station}
         </span>
-        <span className={classnames('arriveTime',{
+        <span className={classnames('arrtime',{
           'red':isArriveStation
         })}>
           {isStartStation?'始发站':arriveTime}
         </span>
-        <span className={classnames('depTime',{
+        <span className={classnames('deptime',{
           'red':isDepartStation
         })}>
           {isEndStation?'终到站':departTime}
@@ -71,7 +68,18 @@ const ScheduleRow = memo(function ScheduleRow(props) {
   )
 })
 ScheduleRow.propTypes={
+  index:PropTypes.number.isRequired,
+  station:PropTypes.string.isRequired,
+  arriveTime:PropTypes.string.isRequired,
+  departTime:PropTypes.string.isRequired,
+  stay:PropTypes.number.isRequired,
 
+  isStartStation:PropTypes.bool.isRequired,
+  isEndStation:PropTypes.bool.isRequired,
+  isDepartStation:PropTypes.bool.isRequired,
+  isArriveStation:PropTypes.bool.isRequired,
+  beforeDepartStation:PropTypes.bool.isRequired,
+  afterArriveStation:PropTypes.bool.isRequired,
 }
 
 
@@ -150,7 +158,29 @@ const Schedule = memo(function Schedule(props) {
 
   return (
     <div className="schedule">
-      schedule
+        <div className="dialog">
+          <h1>列车时刻表</h1>
+          <div className="head">
+            <span className="station">车站</span>
+            <span className="deptime">到达</span>
+            <span className="arrtime">发车</span>
+            <span className="stoptime">停留时间</span>
+          </div>
+          <ul>
+            {
+              scheduleList.map((schedule,index)=>{
+                console.log(schedule)
+                return (
+                  <ScheduleRow 
+                    index={index+1}
+                    {...schedule}
+                    key={schedule.station}
+                  />
+                )
+              })
+            }
+          </ul>
+        </div>
     </div>
   ) 
 })

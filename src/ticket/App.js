@@ -37,6 +37,8 @@ import {
 import dayjs from 'dayjs'
 import {h0} from '../common/fp'
 import useNav from '../common/useNav'
+import {TrainContext} from './context'
+
 
 const Schedule = lazy(()=>import('./Schedule'))  //异步引入
 
@@ -167,6 +169,12 @@ function App(props) {
             }
           />
         </div>
+
+        <TrainContext.Provider value={{trainNumber,departStation,arriveStation,departDate}}>
+          <Candidate 
+            tickets={tickets}
+          />
+        </TrainContext.Provider>
 
         { isScheduleVisible &&
           <div className="mask" onClick={()=>dispatch(toggleIsScheduleVisible())}>
