@@ -111,12 +111,119 @@ export function setSearchParsed(searchParsed){
   }
 }
 
+//这是一个异步的actionCreator
+export function fetchInitial(url) {
+  return (dispatch,getState)=>{
+     fetch(url)
+      .then(res=>res.json())
+      .then(data=>{
+        const {
+          departTimeStr,
+          arriveTimeStr,
+          arriveDate,
+          durationStr,
+          price
+        } = data
+        dispatch(setDepartTimeStr(departTimeStr))
+        dispatch(setArriveTimeStr(arriveTimeStr))
+        dispatch(setArriveDate(arriveDate))
+        dispatch(setDurationStr(durationStr))
+        dispatch(setPrice(price))
+      })
+  }
 
+}
 
+let passengerIdSeed = 0
 
+export function createAdult(){
+  return (dispatch,getState)=>{
+    const {passengers}=getState()
 
+    for(let passenger of passengers){
+      const keys = Object.keys(passengers)
+      for (let key of keys) {
+        if(!passenger[key]){
+          return 
+        }
+      }
+    }
+    dispatch(setPassengers([
+      ...passengers,
+      {
+        id: ++passengerIdSeed,
+        name:'',
+        ticketType:'adult',
+        licenceNo:'',
+        seat:'Z',
+      }
+    ]))
+  }
+}
 
+export function createChild(){
+  return (dispatch,getState)=>{
+    const {passengers}=getState()
 
+    let adultFound = null
+    for(let passenger of passengers){
+      const keys = Object.keys(passengers)
+      for (let key of keys) {
+        if(!passenger[key]){
+          return 
+        }
+      }
+      if (passenger.ticketType==='adult') {
+        adultFound = passenger.id
+      }
+    }
+
+    if (!adultFound) {
+      alert('请至少正确添加一个同行成人')
+      return
+    }
+
+    dispatch(setPassengers([
+      ...passengers,
+      {
+        id: ++passengerIdSeed,
+        name:'',
+        gender:'none',
+        birthday:'',
+        followAdult:adultFound,
+        ticketType:'child',
+        seat:'Z',
+      }
+    ]))
+  }
+}
+
+export function removePassenger(id) {
+  return (dispatch,getState)=>{
+    const {passengers} = getState()
+
+    const newPassengers = passengers.filter(passenger=>{
+      return passenger.id!==id && passenger.followAdult!==id
+      //假如某一个成人乘客被剔除，那么与同行的儿童也必须被剔除
+    })
+    dispatch(setPassengers(newPassengers))
+  }
+}
+
+export function updatePassenger(id,data) {
+  return (dispatch,getState)=>{
+    const {passengers} = getState()
+
+    for (let i = 0; i < passengers.length; ++i) {
+      if (passengers[id]===id) {
+        const newPassengers = [...passengers]
+        newPassengers[i] = Object.assign({},passengers[i],data)
+        dispatch(setPassengers(newPassengers))
+        break
+      }
+    }
+  }
+} 
 
 
 

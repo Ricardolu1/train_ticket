@@ -35,8 +35,8 @@ const CitySection =  memo(function CitySection(props) {
     onSelect
   }=props
   return (
-    <ul className="city-ul">
-      <li className="city-li" data-cate={title}>
+    <ul className="city-ul" data-cate={title}>
+      <li className="city-li" >
         {title}
       </li>
       {cities.map(city=>{
@@ -216,7 +216,7 @@ const CitySelector = memo(function CitySelector(props) {
 
   const toAlpha = useCallback(alpha =>{
     document.querySelector(`[data-cate=${alpha}]`)
-      .scrollIntoView()
+      .scrollIntoView(true)
   },[])
   const ontputCitySections = ()=>{
     if (isLoading) {
