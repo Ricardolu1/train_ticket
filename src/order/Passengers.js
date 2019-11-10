@@ -16,6 +16,9 @@ const Passenger = memo(function Passenger(props) {
     onRemove,
     onUpdate
   }=props
+
+  const isAdult = ticketType==='adult'
+
   return (
     <li className="passenger">
       <i className="delete" onClick={()=>onRemove(id)}>
@@ -24,14 +27,39 @@ const Passenger = memo(function Passenger(props) {
       <ol className="items">
         <li className="item">
           <label className="label name">姓名</label>
-          <input type="text" className="input name" 
-                 placeholder="乘客姓名" value={name}
+          <input type="text" 
+                 className="input name" 
+                 placeholder="乘客姓名" 
+                 value={name}
                  onChange={(e)=>onUpdate(id,{name:e.target.value})}
           />
           <label className="ticket-type">
-            {ticketType==='adult'?'成人票':'儿童票'}
+            {isAdult ? '成人票':'儿童票'}
           </label>
         </li>
+        { isAdult &&
+          <li className="item">
+          <label className="label name">身份证</label>
+          <input type="text" 
+                 className="input name" 
+                 placeholder="证件号码" 
+                 value={licenceNo}
+                 onChange={(e)=>onUpdate(id,{licenceNo:e.target.value})}
+          />
+        </li>
+        }
+        { !isAdult &&
+          <li className="item arrow">
+          <label className="label name">身份证</label>
+          <input type="text" 
+                 className="input name" 
+                 placeholder="证件号码" 
+                 value={licenceNo}
+                 onChange={(e)=>onUpdate(id,{licenceNo:e.target.value})}
+          />
+        </li>
+        }
+
       </ol>
     </li>
   )
@@ -57,14 +85,15 @@ const Passengers = memo(function Passengers(props) {
     removePassenger,
     updatePassenger
   }=props
-
   return (
     <div className="passengers">
       <ul>
         {
           passengers.map(passenger=>{
+            console.log(passenger)
             return (
-              <Passenger {...passenger} 
+              <Passenger 
+                {...passenger} 
                 key={passenger.id} 
                 onRemove={removePassenger}
                 onUpdate={updatePassenger}

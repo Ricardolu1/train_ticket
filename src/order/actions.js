@@ -215,11 +215,13 @@ export function updatePassenger(id,data) {
     const {passengers} = getState()
 
     for (let i = 0; i < passengers.length; ++i) {
-      if (passengers[id]===id) {
+      if (passengers[i].id===id) {
         const newPassengers = [...passengers]
         newPassengers[i] = Object.assign({},passengers[i],data)
+
+        
         dispatch(setPassengers(newPassengers))
-        break
+        break;
       }
     }
   }
