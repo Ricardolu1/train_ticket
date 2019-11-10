@@ -1,3 +1,5 @@
+import { EEXIST } from "constants"
+
 export const  ACTION_SET_TRAIN_NUMBER = 'SET_TRAIN_NUMBER'
 export const  ACTION_SET_DEPART_STATION = 'SET_DEPART_STATION'
 export const  ACTION_SET_ARRIVE_STATION = 'SET_ARRIVE_STATION'
@@ -141,7 +143,7 @@ export function createAdult(){
     const {passengers}=getState()
 
     for(let passenger of passengers){
-      const keys = Object.keys(passengers)
+      const keys = Object.keys(passenger)
       for (let key of keys) {
         if(!passenger[key]){
           return 
@@ -167,7 +169,7 @@ export function createChild(){
 
     let adultFound = null
     for(let passenger of passengers){
-      const keys = Object.keys(passengers)
+      const keys = Object.keys(passenger)
       for (let key of keys) {
         if(!passenger[key]){
           return 
@@ -210,7 +212,7 @@ export function removePassenger(id) {
   }
 }
 
-export function updatePassenger(id,data) {
+export function updatePassenger(id, data, keysToBeRemoved=[]) {
   return (dispatch,getState)=>{
     const {passengers} = getState()
 
@@ -219,13 +221,116 @@ export function updatePassenger(id,data) {
         const newPassengers = [...passengers]
         newPassengers[i] = Object.assign({},passengers[i],data)
 
+        for(let key of keysToBeRemoved){
+          delete newPassengers[i][key]
+        }
         
         dispatch(setPassengers(newPassengers))
         break;
       }
     }
   }
-} 
+}
+
+export function showMenu(menu) {
+  return (dispatch)=>{
+    dispatch(setMenu(menu))
+    dispatch(setIsMenuVisible(true))
+  }
+}
+
+export function hideMenu() {
+  return setIsMenuVisible(false)
+}
+
+export function showGenderMenu(id) {
+  return (dispatch,getState)=>{
+    const {passengers} = getState()
+    const passenger = passengers.find(passenger=>passenger.id===id)
+    if (!passenger) {
+      return 
+    }
+    dispatch(showMenu({
+      onPress(gender){
+        dispatch(updatePassenger(id,{gender}))
+        dispatch(hideMenu())
+      },
+      options:[
+        {
+          title:'男',
+          value:'male',
+          active:'male'===passenger.gender,
+        },
+        {
+          title:'女',
+          value:'female',
+          active:'female'===passenger.gender,
+        }
+      ]
+    }))
+  }
+}
+
+export function showFollowAdultMenu(id) {
+  return (dispatch,getState)=>{
+    const {passengers} = getState()
+    const passenger = passengers.find(passenger=>passenger.id===id)
+    if (!passenger) {
+      return 
+    }
+    dispatch(showMenu({
+      onPress(followAdult){
+        dispatch(updatePassenger(id,{followAdult}))
+        dispatch(hideMenu())
+      },
+      options:passengers
+        .filter(passenger=>passenger.ticketType==='adult')
+        .map(adult=>{
+          return {
+            title:adult.name,
+            value:adult.id,
+            active:adult.id===passenger.followAdult
+          }
+        })
+    }))
+  }
+}
+
+
+export function showTicketTypeMenu(id) {
+  return (dispatch,getState)=>{
+    const {passengers} = getState()
+    const passenger = passengers.find(passenger=>passenger.id===id)
+    if (!passenger) {
+      return 
+    }
+
+    dispatch(showMenu({
+      onPress(ticketType){
+        if ('adult'===ticketType) {
+          dispatch(updatePassenger(id,{
+            ticketType,
+            licenceNo:''
+          },['gender','followAdult','birthday']))
+        }else{
+          passengers,find()
+        }
+      },
+      options:[{
+        title:成人票,
+        value:'adult',
+        active:'adult'===passenger.ticketType,
+      },
+      {
+        title:儿童票,
+        value:'child',
+        active:'child'===passenger.ticketType,
+      },
+    ]
+    }))
+
+  } 
+}
 
 
 

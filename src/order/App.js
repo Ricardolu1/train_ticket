@@ -14,6 +14,8 @@ import Account from './Account'
 import Choose from './Choose'
 import Passengers from './Passengers'
 import Ticket from './Ticket'
+import Menu from './Menu'
+
 import dayjs from 'dayjs'
 
 import {
@@ -27,8 +29,10 @@ import {
   createAdult,
   createChild,
   removePassenger,
-  updatePassenger
-
+  updatePassenger,
+  hideMenu,
+  showGenderMenu,
+  showFollowAdultMenu
 } from './actions'
 
 function App(props) {
@@ -97,9 +101,18 @@ function App(props) {
       createAdult,
       createChild,
       removePassenger,
-      updatePassenger
+      updatePassenger,
+      showGenderMenu,
+      showFollowAdultMenu
     },dispatch)
   },[])
+
+  const menuCbs = useMemo(()=>{
+    return bindActionCreators({
+     hideMenu,
+    },dispatch)
+  },[])
+
 
   if (!searchParsed) {
     return null
@@ -127,6 +140,11 @@ function App(props) {
           <Passengers 
             passengers={passengers} 
             {...passengersCbs}
+          />
+          <Menu 
+            show={isMenuVisible}
+            {...menu}
+            {...menuCbs}
           />
         </div>
     </div>
