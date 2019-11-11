@@ -179,7 +179,7 @@ module.exports = function(webpackEnv) {
       // We use "/" in development.
       publicPath: 'production'!==process.env.NODE_ENV || 'true'===process.env.USE_LOCAL_FILES 
         ? '/'
-        :'https://www.cdn.com/',
+        :'https://ricardolu1.github.io/train_ticket/build',
       // Point sourcemap entries to original disk location (format as URL on Windows)
       devtoolModuleFilenameTemplate: isEnvProduction
         ? info =>
