@@ -68,6 +68,7 @@
     "workbox-webpack-plugin": "4.3.1"
   },
   "proxy": "http://localhost:80",
+  "homepage": "http://myname.github.io/train_ticket/build",
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
