@@ -307,22 +307,36 @@ export function showTicketTypeMenu(id) {
 
     dispatch(showMenu({
       onPress(ticketType){
+        //成人变儿童
         if ('adult'===ticketType) {
           dispatch(updatePassenger(id,{
             ticketType,
             licenceNo:''
           },['gender','followAdult','birthday']))
         }else{
-          passengers,find()
+          //这里判断有没有其他成人乘客的逻辑
+          const adult = passengers.find(passenger=>passenger.id!==id&&passenger.ticketType==='adult')
+          //我们需要增加三个属性移除掉一个属性，儿童变成人
+          if (adult) {
+            dispatch(updatePassenger(id,{
+              ticketType,
+              gender:'',
+              followAdult:adult.id,
+              birthday:'',
+            },['licenceNo']))
+          }else{
+            alert('没有其他成人乘客')
+          }
         }
+        dispatch(hideMenu())
       },
       options:[{
-        title:成人票,
+        title:'成人票',
         value:'adult',
         active:'adult'===passenger.ticketType,
       },
       {
-        title:儿童票,
+        title:'儿童票',
         value:'child',
         active:'child'===passenger.ticketType,
       },

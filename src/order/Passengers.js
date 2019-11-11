@@ -1,5 +1,6 @@
 import React,{
-  memo
+  memo,
+  useMemo
 } from 'react'
 import './Passengers.css'
 import PropTypes from 'prop-types'
@@ -16,7 +17,9 @@ const Passenger = memo(function Passenger(props) {
     onRemove,
     onUpdate,
     showGenderMenu,
-    showFollowAdultMenu
+    showFollowAdultMenu,
+    showTicketTypeMenu,
+    followAdultName
   }=props
 
   const isAdult = ticketType==='adult'
@@ -35,7 +38,7 @@ const Passenger = memo(function Passenger(props) {
                  value={name}
                  onChange={(e)=>onUpdate(id,{name:e.target.value})}
           />
-          <label className="ticket-type">
+          <label className="ticket-type" onClick={()=>showTicketTypeMenu(id)}>
             {isAdult ? '成人票':'儿童票'}
           </label>
         </li>
@@ -85,7 +88,7 @@ const Passenger = memo(function Passenger(props) {
           <input type="text" 
                  className="input followAdult" 
                  placeholder="请选择" 
-                 value={followAdult}
+                 value={followAdultName}
                  onClick={()=>showFollowAdultMenu(id)}
                  readOnly
           />
@@ -108,6 +111,8 @@ Passenger.propTypes={
   onUpdate:PropTypes.func.isRequired,
   showGenderMenu:PropTypes.func.isRequired,
   showFollowAdultMenu:PropTypes.func.isRequired,
+  showTicketTypeMenu:PropTypes.func.isRequired,
+  followAdultName:PropTypes.string,
 }
 
 const Passengers = memo(function Passengers(props) {
@@ -118,8 +123,18 @@ const Passengers = memo(function Passengers(props) {
     removePassenger,
     updatePassenger,
     showGenderMenu,
-    showFollowAdultMenu
+    showFollowAdultMenu,
+    showTicketTypeMenu
   }=props
+
+  const nameMap = useMemo(()=>{
+    const ret = {}
+    for(const passenger of passengers){
+      ret[passenger.id] = passenger.name
+    }
+    return ret
+  },[passengers])
+
   return (
     <div className="passengers">
       <ul>
@@ -127,12 +142,14 @@ const Passengers = memo(function Passengers(props) {
           passengers.map(passenger=>{
             return (
               <Passenger 
+                followAdultName={nameMap[passenger.followAdult]}
                 {...passenger} 
                 key={passenger.id} 
                 onRemove={removePassenger}
                 onUpdate={updatePassenger}
                 showGenderMenu={showGenderMenu}
                 showFollowAdultMenu={showFollowAdultMenu}
+                showTicketTypeMenu={showTicketTypeMenu}
             />)
           })
         }
@@ -152,6 +169,7 @@ Passengers.propTypes = {
   createChild:PropTypes.func.isRequired,
   showGenderMenu:PropTypes.func.isRequired,
   showFollowAdultMenu:PropTypes.func.isRequired,
+  showTicketTypeMenu:PropTypes.func.isRequired,
   
 }
 
