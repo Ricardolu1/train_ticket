@@ -1,4 +1,3 @@
-import { EEXIST } from "constants"
 
 export const  ACTION_SET_TRAIN_NUMBER = 'SET_TRAIN_NUMBER'
 export const  ACTION_SET_DEPART_STATION = 'SET_DEPART_STATION'

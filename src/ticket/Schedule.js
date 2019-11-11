@@ -9,7 +9,6 @@ import './Schedule.css'
 import classnames from 'classnames'
 import leftPad from 'left-pad'
 import dayjs from 'dayjs'
-import { setSearchParsed } from './actions'
 
 
 const ScheduleRow = memo(function ScheduleRow(props) {

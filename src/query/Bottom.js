@@ -1,7 +1,6 @@
 import React ,{
   memo,
   useState,
-  useCallback,
   useMemo,
   useReducer
 }from 'react'
@@ -13,9 +12,9 @@ import Slider from './Slider'
 
 function checkedReducer(state,action) {
   const {type,payload}= action 
+  const newState = {...state}
   switch (type) {
     case 'toggle':
-      const newState = {...state}
       if (payload in newState) {
         delete newState[payload]
       }else{

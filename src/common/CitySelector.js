@@ -212,7 +212,7 @@ const CitySelector = memo(function CitySelector(props) {
       return
     }
     fetchCityData()
-  },[show,cityData,isLoading])
+  },[show, cityData, isLoading, fetchCityData])
 
   const toAlpha = useCallback(alpha =>{
     document.querySelector(`[data-cate=${alpha}]`)

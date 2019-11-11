@@ -5,6 +5,7 @@ import 'normalize.css/normalize.css'
 import store from './store'
 import './index.css'
 import App from './App'
+import * as serviceWorker from '../serviceWorker'
 
 ReactDOM.render(
   <Provider store={store}>
@@ -14,7 +15,11 @@ ReactDOM.render(
 )
 
 
-
+if ('production'===process.env.NODE_ENV){
+  serviceWorker.register()
+}else{
+  serviceWorker.unregister()
+}
 
 
 

@@ -92,7 +92,7 @@ function App(props) {
     dispatch(setDepartDate(h0(dayjs(date).valueOf())))
     dispatch(setHighSpeed(highSpeed==='true'))
     dispatch(setSearchParsed(true))
-  },[])
+  },[dispatch])
 
   useEffect(()=>{
     if (!searchParsed) {
@@ -136,23 +136,7 @@ function App(props) {
         dispatch(setDepartStations(depStation))
         dispatch(setArriveStations(arrStation))
       })
-  },[
-      from,
-      to,
-      departDate,
-      highSpeed,
-      searchParsed,
-      orderType,
-      onlyTickets,
-      checkedTicketTypes,
-      checkedTrainTypes,
-      checkedDepartStations,
-      checkedArriveStations,
-      departTimeStart,
-      departTimeEnd,
-      arriveTimeStart,
-      arriveTimeEnd
-  ])
+  },[from, to, departDate, highSpeed, searchParsed, orderType, onlyTickets, checkedTicketTypes, checkedTrainTypes, checkedDepartStations, checkedArriveStations, departTimeStart, departTimeEnd, arriveTimeStart, arriveTimeEnd, dispatch])
 
   const {
     isPrevDisabled,
@@ -176,7 +160,7 @@ function App(props) {
       setArriveTimeStart,
       setArriveTimeEnd,
     },dispatch)
-  },[])
+  },[dispatch])
   if (!searchParsed) {
     return null
   }

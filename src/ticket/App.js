@@ -78,7 +78,7 @@ function App(props) {
     dispatch(setTrainNumber(trainNumber))
     dispatch(setDepartDate(h0(dayjs(date).valueOf()))) //需要一个unix时间戳
     dispatch(setSearchParsed(true)) //url解析完成
-  },[])
+  },[dispatch])
 
   useEffect(()=>{
     document.title = trainNumber
@@ -116,7 +116,7 @@ function App(props) {
         dispatch(setDurationStr(durationStr))
         dispatch(setTickets(candidates))
       })
-  },[searchParsed,departDate,trainNumber])
+  },[searchParsed, departDate, trainNumber, dispatch])
 
   const {
     isPrevDisabled,
@@ -129,7 +129,7 @@ function App(props) {
     return bindActionCreators({
       toggleIsScheduleVisible
     },dispatch)
-  },[])
+  },[dispatch])
 
 
   if(!searchParsed){

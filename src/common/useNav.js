@@ -13,14 +13,14 @@ export default function useNav(departDate,dispatch,prevDate,nextDate) {
       return 
     }
     dispatch(prevDate())
-  },[isPrevDisabled])
+  },[dispatch, isPrevDisabled, prevDate])
 
   const next =useCallback(()=>{
     if (isNextDisabled) {
       return 
     }
     dispatch(nextDate())
-  },[isNextDisabled]) 
+  },[dispatch, isNextDisabled, nextDate]) 
   return {
     isPrevDisabled,
     isNextDisabled,

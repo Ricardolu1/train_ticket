@@ -45,7 +45,7 @@ function App(props) {
         hideCitySelector
       },
       dispatch)
-  }, [])
+  }, [dispatch])
 
   const citySelectorCbs = useMemo(()=>{
     return bindActionCreators({
@@ -53,25 +53,25 @@ function App(props) {
       fetchCityData,
       onSelect:setSelectedCity
     },dispatch)
-  },[])
+  },[dispatch])
 
   const departDateCbs=useMemo(()=>{//cbs的意思是callbacks
     return bindActionCreators({
       onClick:showDateSelector,
     },dispatch)
-  },[])
+  },[dispatch])
 
   const DateSelectorCbs = useMemo(()=>{
     return bindActionCreators({
       onBack:hideDateSelector
     },dispatch)
-  },[])
+  },[dispatch])
 
   const highSpeedCbs = useMemo(()=>{
     return bindActionCreators({
       toggle:toggleHighSpeed
     },dispatch)
-  },[])
+  },[dispatch])
 
   const onSelectDate=useCallback((day)=>{
     if (!day) {
@@ -82,7 +82,7 @@ function App(props) {
     }
     dispatch(setDepartDate(day))
     dispatch(hideDateSelector())
-  },[])
+  },[dispatch])
 
   return (
     <div>
